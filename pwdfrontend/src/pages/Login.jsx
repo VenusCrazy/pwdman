@@ -1,7 +1,21 @@
 import { Link } from "react-router-dom";
 import { FaUser, FaLock, FaCheck, FaGoogle, FaApple } from "react-icons/fa6";
+import { useState } from "react";
+import axios from 'axios';
 
 function Login() {
+  const[data,setData]=useState({
+    email: "",
+    password:"",
+  });
+    
+   async function handleLogin(e) {
+    e.preventDefault();
+
+    const res = await axios.get("http://localhost:5001/");
+    console.log(res.data);
+  }
+
   return (
     <div className="min-h-[calc(100vh-8rem)] md:min-h-[calc(100vh-10rem)] lg:min-h-[calc(100vh-12rem)] flex items-center justify-center px-4 py-8 md:py-10">
       <div className="grid w-full max-w-4xl grid-cols-1 lg:grid-cols-2 overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl shadow-green-900/10">
@@ -63,15 +77,15 @@ function Login() {
             <div className="h-px flex-1 bg-white/10" />
           </div>
 
-          <form className="card">
+          <form className="card" onSubmit={handleLogin}>
             <div className="input-box">
               <FaUser className="input-icon" />
-              <input type="email" placeholder="Email" required />
+              <input type="email" placeholder="Email" required value={data.email}   onChange={(e) => setData({ ...data, email: e.target.value })}/>
             </div>
 
             <div className="input-box">
               <FaLock className="input-icon" />
-              <input type="password" placeholder="Password" required />
+              <input type="password" placeholder="Password" required value={data.password}  onChange={(e) => setData({ ...data, password: e.target.value})} />
             </div>
 
             <div className="remember-forgot">
