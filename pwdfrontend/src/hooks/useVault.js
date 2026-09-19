@@ -2,8 +2,12 @@ import { useState, useEffect } from "react";
 
 function useVault() {
   const [entries, setEntries] = useState(() => {
-    const saved = localStorage.getItem("entries");
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem("entries");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
   })
 
   useEffect(()=>{

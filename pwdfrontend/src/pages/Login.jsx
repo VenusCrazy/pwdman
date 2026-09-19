@@ -1,19 +1,41 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaCheck, FaGoogle, FaApple } from "react-icons/fa6";
 import { useState } from "react";
-import axios from 'axios';
+import api from "../api";
+import Toast from "../components/Toast";
+import { useUser } from "../../context/userContext";
 
 function Login() {
-  const[data,setData]=useState({
+  const navigate = useNavigate();
+  const { setUser } = useUser();
+  const [data, setData] = useState({
     email: "",
-    password:"",
+    password: "",
   });
-    
-   async function handleLogin(e) {
-    e.preventDefault();
+  const [cardError, setCardError] = useState("");
+  const [toastError, setToastError] = useState("");
+  const [toastToken, setToastToken] = useState(0);
 
-    const res = await axios.get("http://localhost:5001/");
-    console.log(res.data);
+  async function handleLogin(e) {
+    e.preventDefault();
+    setCardError("");
+
+    try {
+      const res = await api.post("/login", {
+        email: data.email,
+        password: data.password,
+      });
+      setUser(res.data);
+      navigate("/");
+    } catch (err) {
+      const status = err.response?.status;
+      if (status === 401 || status === 404) {
+        setCardError(err.response?.data?.error || "Invalid email or password");
+      } else {
+        setToastError(err.response?.data?.error || "Could not reach the server");
+        setToastToken((n) => n + 1);
+      }
+    }
   }
 
   return (
@@ -80,12 +102,12 @@ function Login() {
           <form className="card" onSubmit={handleLogin}>
             <div className="input-box">
               <FaUser className="input-icon" />
-              <input type="email" placeholder="Email" required value={data.email}   onChange={(e) => setData({ ...data, email: e.target.value })}/>
+              <input type="email" placeholder="Email" required value={data.email} onChange={(e) => setData({ ...data, email: e.target.value })} />
             </div>
 
             <div className="input-box">
               <FaLock className="input-icon" />
-              <input type="password" placeholder="Password" required value={data.password}  onChange={(e) => setData({ ...data, password: e.target.value})} />
+              <input type="password" placeholder="Password" required value={data.password} onChange={(e) => setData({ ...data, password: e.target.value })} />
             </div>
 
             <div className="remember-forgot">
@@ -97,6 +119,8 @@ function Login() {
                 Forgot password?
               </a>
             </div>
+
+            {cardError && <p className="text-sm text-red-500">{cardError}</p>}
 
             <button type="submit" className="login-btn">
               Sign in
@@ -111,6 +135,8 @@ function Login() {
           </form>
         </div>
       </div>
+
+      <Toast token={toastToken} message={toastError} variant="error" duration={3000} />
     </div>
   );
 }

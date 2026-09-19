@@ -121,7 +121,8 @@ function SaveEntry({ generatedPassword, entries, setEntries }) {
 
       <button
         onClick={handleSave}
-        className="px-4 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-semibold tracking-wide transition-colors cursor-pointer"
+        disabled={!label.trim() || !password.trim()}
+        className="px-4 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-semibold tracking-wide transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-green-600"
       >
         Save
       </button>

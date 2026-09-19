@@ -1,8 +1,48 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaUser, FaLock, FaCheck, FaGoogle, FaApple } from "react-icons/fa6";
 import { MdDriveFileRenameOutline } from "react-icons/md";
+import api from "../api";
+import Toast from "../components/Toast";
 
 function Signup() {
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirm: "",
+  });
+  const [error, setError] = useState("");
+  const [toastError, setToastError] = useState("");
+  const [toastToken, setToastToken] = useState(0);
+
+  async function handleSignUp(e) {
+    e.preventDefault();
+    setError("");
+
+    if (data.password !== data.confirm) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const res = await api.post("/signup", {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
+      setError("");
+      console.log(res.data);
+    } catch (err) {
+      if (err.response?.status === 400) {
+        setError(err.response?.data?.error || "Something went wrong");
+      } else {
+        setToastError(err.response?.data?.error || "Could not reach the server");
+        setToastToken((n) => n + 1);
+      }
+    }
+  }
+
   return (
     <div className="min-h-[calc(100vh-8rem)] md:min-h-[calc(100vh-10rem)] lg:min-h-[calc(100vh-12rem)] flex items-center justify-center px-4 py-8 md:py-10">
       <div className="grid w-full max-w-4xl grid-cols-1 lg:grid-cols-2 overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl shadow-green-900/10">
@@ -64,26 +104,52 @@ function Signup() {
             <div className="h-px flex-1 bg-white/10" />
           </div>
 
-          <form className="card">
+          <form className="card" onSubmit={handleSignUp}>
             <div className="input-box">
               <FaUser className="input-icon" />
-              <input type="text" placeholder="Name" required />
+              <input
+                type="text"
+                placeholder="Name"
+                required
+                value={data.name}
+                onChange={(e) => setData({ ...data, name: e.target.value })}
+              />
             </div>
 
             <div className="input-box">
               <MdDriveFileRenameOutline className="input-icon" />
-              <input type="email" placeholder="Email" required />
+              <input
+                type="email"
+                placeholder="Email"
+                required
+                value={data.email}
+                onChange={(e) => setData({ ...data, email: e.target.value })}
+              />
             </div>
 
             <div className="input-box">
               <FaLock className="input-icon" />
-              <input type="password" placeholder="Password" required />
+              <input
+                type="password"
+                placeholder="Password"
+                required
+                value={data.password}
+                onChange={(e) => setData({ ...data, password: e.target.value })}
+              />
             </div>
 
             <div className="input-box">
               <FaLock className="input-icon" />
-              <input type="password" placeholder="Confirm password" required />
+              <input
+                type="password"
+                placeholder="Confirm password"
+                required
+                value={data.confirm}
+                onChange={(e) => setData({ ...data, confirm: e.target.value })}
+              />
             </div>
+
+            {error && <p className="text-sm text-red-500">{error}</p>}
 
             <button type="submit" className="login-btn">
               Create account
@@ -98,6 +164,8 @@ function Signup() {
           </form>
         </div>
       </div>
+
+      <Toast token={toastToken} message={toastError} variant="error" duration={3000} />
     </div>
   );
 }

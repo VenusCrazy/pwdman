@@ -49,6 +49,7 @@ function PasswordGenerator({ generatedPassword, onGenerated }) {
   const [useLower, setUseLower] = useState(true);
   const [useNumbers, setUseNumbers] = useState(true);
   const [useSymbols, setUseSymbols] = useState(true);
+  const [message, setMessage] = useState("");
   const { copied, triggerCopy, copyToken } = useCopy(generatedPassword);
 
   function generate() {
@@ -59,9 +60,11 @@ function PasswordGenerator({ generatedPassword, onGenerated }) {
     if (useSymbols) pool += "!@#$%^&*()_+-=[]{}|;:,.<>?";
 
     if (pool === "") {
-      onGenerated("Pick at least one option!");
+      setMessage("Pick at least one option!");
       return;
     }
+
+    setMessage("");
 
     const array = new Uint32Array(length);
     crypto.getRandomValues(array);
@@ -123,6 +126,8 @@ function PasswordGenerator({ generatedPassword, onGenerated }) {
           </label>
         ))}
       </div>
+
+      {message && <p className="text-sm text-amber-500">{message}</p>}
 
       <button
         onClick={generate}

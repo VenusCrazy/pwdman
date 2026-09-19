@@ -1,8 +1,12 @@
 const express = require("express");
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, ".env") });
 const cors = require("cors")
 const mongoose = require("mongoose")
 const app=express()
+const cookieParser=require('cookie-parser')
+
+
 //database connection
 mongoose.connect(process.env.MONGO_URL)
 .then(()=>{console.log("Database Connected")})
@@ -10,6 +14,8 @@ mongoose.connect(process.env.MONGO_URL)
 
 //middleware
 app.use(express.json());
+app.use(cookieParser())
+app.use(express.urlencoded({extended:false})),
 
 app.use('/',require('./routes/authRoutes'))
 

@@ -19,13 +19,13 @@ function SharePreview() {
 
   useEffect(() => {
     if (entry && !entry.viewed) {
-      setEntries(
-        entries.map((e) =>
+      setEntries((prev) =>
+        prev.map((e) =>
           e.id === id ? { ...e, viewed: true } : e
         )
       );
     }
-  }, [id]);
+  }, [id, entry, setEntries]);
 
   if (!entry) {
     return (
