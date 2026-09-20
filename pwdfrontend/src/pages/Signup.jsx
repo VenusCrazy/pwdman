@@ -26,11 +26,12 @@ function Signup() {
     }
 
     try {
-      const res = await api.post("/signup", {
+      const res = await api.post("/api/auth/signup", {
         name: data.name,
         email: data.email,
         password: data.password,
       });
+       navigate("/Login")
       setError("");
       console.log(res.data);
     } catch (err) {

@@ -7,4 +7,11 @@ const signAccessToken = (user) =>
         { expiresIn: '15m' }
     )
 
-module.exports = { signAccessToken }
+const signRefreshToken = (user) =>
+    jwt.sign(
+        { id: user._id, ver: user.refreshTokenVersion },
+        process.env.JWT_SECRET,
+        { expiresIn: '7d' }
+    )
+
+module.exports = { signAccessToken, signRefreshToken }

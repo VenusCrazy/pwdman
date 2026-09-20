@@ -3,6 +3,7 @@ import { userContext } from "./userContext";
 
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [accessToken, setAccessToken] = useState(null)
 
   const logout = () => setUser(null);
 

@@ -21,11 +21,11 @@ function Login() {
     setCardError("");
 
     try {
-      const res = await api.post("/login", {
+      const res = await api.post("/api/auth/login", {
         email: data.email,
         password: data.password,
       });
-      setUser(res.data);
+      setUser(res.data.user);
       navigate("/");
     } catch (err) {
       const status = err.response?.status;
