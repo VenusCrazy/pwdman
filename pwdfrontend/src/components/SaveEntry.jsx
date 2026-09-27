@@ -49,25 +49,19 @@ function scorePassword(password) {
   return { tier: 4, label: "Very strong", bar: "bg-green-400", text: "text-green-400" };
 }
 
-function SaveEntry({ generatedPassword, entries, setEntries }) {
+function SaveEntry({ generatedPassword, onSave }) {
   const [label, setLabel] = useState("");
   const [password, setPassword] = useState("");
   const strength = scorePassword(password);
 
-  function handleSave() {
-    const newEntry = {
-      id: crypto.randomUUID(),
-      label: label,
-      password: password,
-      viewed: false,
-    };
-    setEntries([...entries, newEntry]);
+  async function handleSave() {
+    await onSave(label, password);
     setLabel("");
     setPassword("");
   }
 
   return (
-    <div className="rounded-lg border border-white/10 bg-white/5 p-6 flex flex-col gap-4">
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col gap-4 shadow-2xl shadow-green-900/10">
       <h3 className="text-lg font-bold tracking-wide text-white mb-4 pb-4 border-b border-white/10">
         Save Entry
       </h3>

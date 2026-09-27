@@ -3,8 +3,10 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Vault from "./pages/Vault";
 import SharePreview from "./pages/SharePreview";
+import Share from "./pages/Share";
 import { UserContextProvider } from "../context/UserContextProvider";
 import { useUser } from "../context/userContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function AppContent() {
   const { user, logout } = useUser();
@@ -41,8 +43,10 @@ function AppContent() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/" element={user ? <Vault /> : <Navigate to="/login" replace />} />
-        <Route path="/share-preview/:id" element={<SharePreview />} />
+        <Route path="/vault" element={<ProtectedRoute><Vault /></ProtectedRoute>} />
+        <Route path="/" element={<Navigate to={user ? "/vault" : "/login"} replace />} />
+        <Route path="/share-preview" element={<ProtectedRoute><SharePreview /></ProtectedRoute>} />
+        <Route path="/share/:token" element={<Share />} />
       </Routes>
     </>
   );

@@ -84,7 +84,7 @@ function PasswordGenerator({ generatedPassword, onGenerated }) {
   ];
 
   return (
-    <div className="rounded-lg border border-white/10 bg-white/5 p-6 flex flex-col gap-4">
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col gap-4 shadow-2xl shadow-green-900/10">
       <style>{sliderCSS}</style>
       <h2 className="text-lg font-bold tracking-wide text-white mb-4 pb-4 border-b border-white/10">
         Password Generator

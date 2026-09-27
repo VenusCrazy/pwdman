@@ -1,13 +1,13 @@
 import EntryRow from "./EntryRow";
 import { FaLock } from "react-icons/fa6";
 
-function EntryList({ entries, setEntries }) {
-  function handleDelete(id) {
-    setEntries(entries.filter((entry) => entry.id !== id));
+function EntryList({ entries, onDelete }) {
+  async function handleDelete(id) {
+    await onDelete(id);
   }
 
   return (
-    <div className="rounded-lg border border-white/10 bg-white/5 p-6 flex flex-col gap-4">
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col gap-4 shadow-2xl shadow-green-900/10">
       <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/10">
         <h3 className="text-lg font-bold tracking-wide text-white">Saved Entries</h3>
         <span className="text-sm px-2 py-0.5 rounded-lg bg-green-600/20 text-green-500 font-semibold tabular-nums">

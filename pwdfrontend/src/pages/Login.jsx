@@ -7,7 +7,7 @@ import { useUser } from "../../context/userContext";
 
 function Login() {
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  const { setUser, setAccessToken } = useUser();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -26,7 +26,8 @@ function Login() {
         password: data.password,
       });
       setUser(res.data.user);
-      navigate("/");
+      setAccessToken(res.data.accessToken);
+      navigate("/vault");
     } catch (err) {
       const status = err.response?.status;
       if (status === 401 || status === 404) {

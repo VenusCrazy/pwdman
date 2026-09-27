@@ -3,14 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash, FaCopy, FaTrashCan, FaShareNodes } from "react-icons/fa6";
 import Toast from "./Toast";
 import useCopy from "../hooks/useCopy";
+import api from "../api";
 
 function EntryRow({ entry, onDelete }) {
   const [revealed, setRevealed] = useState(false);
   const { copied, triggerCopy, copyToken } = useCopy(entry.password);
   const navigate = useNavigate();
 
-  function handleShare() {
-    navigate(`/share-preview/${entry.id}`);
+  async function handleShare() {
+    const { data } = await api.post(`/api/vault/${entry.id}/share`);
+    navigate("/share-preview", { state: { url: data.url } });
   }
 
   return (

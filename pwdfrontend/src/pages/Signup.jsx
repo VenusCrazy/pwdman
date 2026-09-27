@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaCheck, FaGoogle, FaApple } from "react-icons/fa6";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 import api from "../api";
@@ -15,6 +15,7 @@ function Signup() {
   const [error, setError] = useState("");
   const [toastError, setToastError] = useState("");
   const [toastToken, setToastToken] = useState(0);
+  const navigate = useNavigate();
 
   async function handleSignUp(e) {
     e.preventDefault();
@@ -31,7 +32,7 @@ function Signup() {
         email: data.email,
         password: data.password,
       });
-       navigate("/Login")
+       navigate("/login");
       setError("");
       console.log(res.data);
     } catch (err) {
